@@ -1,11 +1,10 @@
-<mat-spinner
-    class="loader"
-    color="accent"
-    diameter="20"
-    *ngIf="isLoading"
-></mat-spinner>
+<mat-progress-bar
+  class="loader"
+  mode="buffer"
+  *ngIf="isLoading"
+></mat-progress-bar>
 <h5>Current weather</h5>
-<div [class.loading]="isLoading">
-    <mat-icon class="widget-icon">wb_sunny</mat-icon>
-    <div class="value">+25</div>
-</div>
+<section [class.loading]="isLoading">
+  <mat-icon class="widget-icon">wb_sunny</mat-icon>
+  <div class="value">+25</div>
+</section>

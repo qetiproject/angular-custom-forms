@@ -1,6 +1,4 @@
 import { Component, ContentChild, OnInit } from '@angular/core';
-import { VelocityWidgetComponent } from '../widgets/velocity-widget/velocity-widget.component';
-import { WeatherWidgetComponent } from '../widgets/weather-widget/weather-widget.component';
 import { Widget } from '../widgets/widget.interface';
 import { WIDGET } from '../widgets/widget.token';
 
