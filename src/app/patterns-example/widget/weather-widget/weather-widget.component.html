@@ -1,0 +1,11 @@
+<mat-spinner
+    class="loader"
+    color="accent"
+    diameter="20"
+    *ngIf="isLoading"
+></mat-spinner>
+<h5>Current weather</h5>
+<div [class.loading]="isLoading">
+    <mat-icon class="widget-icon">wb_sunny</mat-icon>
+    <div class="value">+25</div>
+</div>

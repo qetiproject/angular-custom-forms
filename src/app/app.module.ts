@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ComplexFormControlModule } from './complex-form-control/complex-form-control.module';
+import { PatternsExampleModule } from './patterns-example/patterns.module';
 
 @NgModule({
   declarations: [
@@ -17,8 +18,10 @@ import { ComplexFormControlModule } from './complex-form-control/complex-form-co
     MatToolbarModule,
     MatButtonModule,
     ComplexFormControlModule,
+    PatternsExampleModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  
 })
 export class AppModule { }
