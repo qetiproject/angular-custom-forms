@@ -6,8 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WidgetWrapperComponent } from './widget-wrapper/widget-wrapper.component';
-import { VelocityWidgetComponent } from './widget/velocity-widget/velocity-widget.component';
-import { WeatherWidgetComponent } from './widget/weather-widget/weather-widget.component';
+import { VelocityWidgetComponent } from './widgets/velocity-widget/velocity-widget.component';
+import { WeatherWidgetComponent } from './widgets/weather-widget/weather-widget.component';
 
 @NgModule({
   declarations: [
