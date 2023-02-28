@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { AdvancedSearchControlModule } from './advanced-search-control/advanced-search-control.module';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     BrowserAnimationsModule,
     MatToolbarModule,
     MatButtonModule,
+    AdvancedSearchControlModule
   ],
   providers: [],
   bootstrap: [AppComponent]
