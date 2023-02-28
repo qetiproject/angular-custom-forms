@@ -16,7 +16,7 @@ import { AdvancedSearchControlModule } from './advanced-search-control/advanced-
     BrowserAnimationsModule,
     MatToolbarModule,
     MatButtonModule,
-    AdvancedSearchControlModule
+    AdvancedSearchControlModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

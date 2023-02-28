@@ -1,5 +1,8 @@
 <mat-form-field class="search-form-field">
     <mat-icon matPrefix>search</mat-icon>
     <!-- <input matInput placeholder="Start to type..." name="advanced-search" /> -->
-    <app-custom-form-field-control></app-custom-form-field-control>
+    <app-custom-form-field-control 
+        [value]="''"
+        placeholder='Start to type...'
+    ></app-custom-form-field-control>
 </mat-form-field>
