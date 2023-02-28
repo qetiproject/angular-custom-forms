@@ -5,6 +5,8 @@
 </mat-select>
 <mat-divider [vertical]="true" class="divider"></mat-divider>
 <input 
+    [ngStyle]="{opacity: disabled ? 0.5 : 1}"
+    [disabled]="disabled"
     matInput 
     [placeholder]="placeholder"
     type="text" 

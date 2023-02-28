@@ -57,26 +57,43 @@ export class CustomFormFieldControlComponent implements OnInit, MatFormFieldCont
   ngControl!: NgControl | AbstractControlDirective | null;
 
   focused!: boolean;
-  empty!: boolean;
-  shouldLabelFloat!: boolean;
+
+  get empty(): boolean {
+    return !this.value.query && !this.value.scope
+  }
+
+  @HostBinding('class.floated')
+
+  get shouldLabelFloat(): boolean {
+    // return this.focused || this.empty;
+    return true;
+  }
+
+  @Input()
   required!: boolean;
+  
+  @Input()
   disabled!: boolean;
-  errorState!: boolean;
+
+
+  errorState = true;
+  
   controlType?: string | undefined;
   autofilled?: boolean | undefined;
   userAriaDescribedBy?: string | undefined;
   
-
   constructor(
     private focusMonitor: FocusMonitor
   ) {}
 
- 
+  @HostBinding('attr.aria-describedby') describedBy='';
 
   setDescribedByIds(ids: string[]): void {
+    this.describedBy = ids.join(' ');
   }
 
-  onContainerClick(event: MouseEvent): void {
+  onContainerClick(): void {
+    this.focusMonitor.focusVia(this.input, 'program');
   }
   
   ngOnInit(): void {
