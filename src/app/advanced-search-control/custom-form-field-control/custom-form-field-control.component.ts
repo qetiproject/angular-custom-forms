@@ -1,9 +1,9 @@
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NgControl, AbstractControlDirective } from '@angular/forms';
+import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild } from '@angular/core';
+import { NgControl, ControlValueAccessor, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 export interface FormFieldValue {
   query: string;
@@ -21,7 +21,8 @@ export interface FormFieldValue {
     }
   ]
 })
-export class CustomFormFieldControlComponent implements OnInit, MatFormFieldControl<FormFieldValue>, OnDestroy{
+export class CustomFormFieldControlComponent implements OnInit, MatFormFieldControl<FormFieldValue>, OnDestroy, ControlValueAccessor {
+  
   static nextId = 0;
   
   @ViewChild(MatInput, { read: ElementRef, static: true })
@@ -29,15 +30,13 @@ export class CustomFormFieldControlComponent implements OnInit, MatFormFieldCont
 
   @Input()
   set value(value: any) {
-    this._value = value;
+    this.form.patchValue(value);
     this.stateChanges.next();
   }
 
   get value() {
-    return this._value;
+    return this.form.value;
   }
-
-  private _value!: FormFieldValue;
 
   stateChanges = new Subject<void>();
   
@@ -53,8 +52,6 @@ export class CustomFormFieldControlComponent implements OnInit, MatFormFieldCont
     return this._placeholder;
   }
   private _placeholder!: string;
-
-  ngControl!: NgControl | AbstractControlDirective | null;
 
   focused!: boolean;
 
@@ -82,9 +79,40 @@ export class CustomFormFieldControlComponent implements OnInit, MatFormFieldCont
   autofilled?: boolean | undefined;
   userAriaDescribedBy?: string | undefined;
   
+  onChange!: (value: FormFieldValue) => void;
+  onTouche!: () => void;
+
+  form!: FormGroup;
+
   constructor(
-    private focusMonitor: FocusMonitor
-  ) {}
+    private focusMonitor: FocusMonitor,
+    @Optional() @Self() public ngControl: NgControl,
+    private fb: FormBuilder
+  ) {
+    this.form = this.fb.group({
+      scope: new FormControl(''),
+      query: new FormControl('')
+    })
+    if(this.ngControl != null) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+
+  writeValue(obj: FormFieldValue): void {
+    this.value = obj;
+  }
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: any): void {
+    this.onTouche = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+    this.form.disable();
+    this.stateChanges.next();
+  }
 
   @HostBinding('attr.aria-describedby') describedBy='';
 
@@ -102,6 +130,7 @@ export class CustomFormFieldControlComponent implements OnInit, MatFormFieldCont
         this.focused = !!focused;
         this.stateChanges.next();
       });
+    
   }
 
   ngOnDestroy(): void {

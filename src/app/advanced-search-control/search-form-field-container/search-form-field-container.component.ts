@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-search-form-field-container',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./search-form-field-container.component.css']
 })
 export class SearchFormFieldContainerComponent {
-
+  formControl = new FormControl({scope: '', query: ''})
 }
