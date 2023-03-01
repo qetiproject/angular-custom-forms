@@ -7,5 +7,22 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./search-form-field-container.component.css']
 })
 export class SearchFormFieldContainerComponent {
-  formControl = new FormControl({scope: '', query: ''})
+  formControl = new FormControl(
+     { scope: '', query: ''  },
+    // AdvancedSearchValidetor
+  );
+
+  constructor() {}
+
+  ngOnInit(): void {}
+}
+
+function AdvancedSearchValidetor(control: FormControl) {
+  return control.value.scope !== null && control.value.query !== ''
+    ? null
+    : {
+        validateSearch: {
+          valid: true,
+        },
+      };
 }

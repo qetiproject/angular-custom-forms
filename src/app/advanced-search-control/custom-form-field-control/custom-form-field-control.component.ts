@@ -1,13 +1,21 @@
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild } from '@angular/core';
-import { NgControl, ControlValueAccessor, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { NgControl, ControlValueAccessor, FormBuilder, FormGroup, FormControl, AbstractControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 
 export interface FormFieldValue {
   query: string;
   scope: string;
+}
+
+export class CustomErrorMatcher implements ErrorStateMatcher {
+
+  isErrorState(control: FormControl): boolean {
+    return control.dirty && control.invalid;
+  }
 }
 
 @Component({
@@ -18,6 +26,10 @@ export interface FormFieldValue {
     {
       provide: MatFormFieldControl,
       useExisting: CustomFormFieldControlComponent
+    },
+    {
+      provide: ErrorStateMatcher,
+      useClass: CustomErrorMatcher
     }
   ]
 })
@@ -72,9 +84,22 @@ export class CustomFormFieldControlComponent implements OnInit, MatFormFieldCont
   @Input()
   disabled!: boolean;
 
+  // @Input()
+  // errorStateMatcher!: ErrorStateMatcher;
 
-  errorState = true;
-  
+  get errorState() {
+    // const matcher = this.errorStateMatcher || this.errorMattcher
+    // return this.errorMattcher.isErrorState(
+    //   this.ngControl.control as FormControl, 
+    //   null
+    // );
+    // error with input
+    return this.errorMattcher.isErrorState(
+        this.ngControl.control as FormControl, 
+        null
+    )
+  }
+
   controlType?: string | undefined;
   autofilled?: boolean | undefined;
   userAriaDescribedBy?: string | undefined;
@@ -87,7 +112,8 @@ export class CustomFormFieldControlComponent implements OnInit, MatFormFieldCont
   constructor(
     private focusMonitor: FocusMonitor,
     @Optional() @Self() public ngControl: NgControl,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private errorMattcher: ErrorStateMatcher
   ) {
     this.form = this.fb.group({
       scope: new FormControl(''),
@@ -110,8 +136,8 @@ export class CustomFormFieldControlComponent implements OnInit, MatFormFieldCont
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
-    this.form.disable();
-    this.stateChanges.next();
+    // this.form.disable();
+    // this.stateChanges.next();
   }
 
   @HostBinding('attr.aria-describedby') describedBy='';
@@ -130,7 +156,10 @@ export class CustomFormFieldControlComponent implements OnInit, MatFormFieldCont
         this.focused = !!focused;
         this.stateChanges.next();
       });
-    
+    this.focusMonitor.monitor(this.input).pipe(take(1)).subscribe(() => {
+      this.onTouche();
+    })
+    this.form.valueChanges.subscribe((value) => this.onChange(value));
   }
 
   ngOnDestroy(): void {
